@@ -18,17 +18,68 @@
         }
     </style>
 	<script>
-		function handleTouchStart(x, y) {
-			console.log("Touch started at: " + x + ", " + y);
-			// Canvas üzerinde dokunma işlemini burada işleyin
-		}
-		function handleTouchMove(x, y) {
-			console.log("Touch moved to: " + x + ", " + y);
-		}
-		function handleTouchEnd(x, y) {
-			console.log("Touch ended at: " + x + ", " + y);
-		}
-	</script>
+        function handleTouchStart(x, y) {
+            const iframe = document.querySelector('iframe');
+            const rect = iframe.getBoundingClientRect();
+            const iframeX = x - rect.left;
+            const iframeY = y - rect.top;
+
+            // Iframe'de bir tıklama olayı simüle et
+            const clickEvent = new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+                clientX: x,
+                clientY: y,
+                view: iframe.contentWindow
+            });
+            iframe.dispatchEvent(clickEvent);
+
+            // Dokunma olayı simüle et (mobil için)
+            const touchEvent = new TouchEvent('touchstart', {
+                bubbles: true,
+                cancelable: true,
+                touches: [{ clientX: x, clientY: y }],
+                targetTouches: [{ clientX: x, clientY: y }],
+                changedTouches: [{ clientX: x, clientY: y }],
+                view: iframe.contentWindow
+            });
+            iframe.dispatchEvent(touchEvent);
+        }
+
+        function handleTouchMove(x, y) {
+            const iframe = document.querySelector('iframe');
+            const rect = iframe.getBoundingClientRect();
+            const iframeX = x - rect.left;
+            const iframeY = y - rect.top;
+
+            const touchEvent = new TouchEvent('touchmove', {
+                bubbles: true,
+                cancelable: true,
+                touches: [{ clientX: x, clientY: y }],
+                targetTouches: [{ clientX: x, clientY: y }],
+                changedTouches: [{ clientX: x, clientY: y }],
+                view: iframe.contentWindow
+            });
+            iframe.dispatchEvent(touchEvent);
+        }
+
+        function handleTouchEnd(x, y) {
+            const iframe = document.querySelector('iframe');
+            const rect = iframe.getBoundingClientRect();
+            const iframeX = x - rect.left;
+            const iframeY = y - rect.top;
+
+            const touchEvent = new TouchEvent('touchend', {
+                bubbles: true,
+                cancelable: true,
+                touches: [],
+                targetTouches: [],
+                changedTouches: [{ clientX: x, clientY: y }],
+                view: iframe.contentWindow
+            });
+            iframe.dispatchEvent(touchEvent);
+        }
+    </script>
 </head>
 <body>
     <iframe src="https://playcanv.as/index/913374e8"></iframe>
